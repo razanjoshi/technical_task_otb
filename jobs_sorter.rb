@@ -4,9 +4,12 @@
 class JobsSorter
   require 'pry'
 
+  attr_reader :sorted_jobs
+
   def initialize(unstructured_jobs)
-    @jobs_hash = job_parser(unstructured_jobs)
+    @parsed_jobs = job_parser(unstructured_jobs)
     @labeled = label_jobs
+    @sorted_jobs = []
   end
 
   def job_parser(unstructured_jobs)
@@ -23,13 +26,39 @@ class JobsSorter
     jobs_hash
   end
 
+  def sort
+    while @labeled.values.include?("incomplete")
+      @labeled.each_pair do |job, status|
+        sort_jobs(job) if status == "incomplete"
+      end
+    end
+    @sorted_jobs
+  end
+
   private
 
   def label_jobs
     labeled = {}
-    @jobs_hash.each do |key, value|
+    @parsed_jobs.each do |key, value|
       labeled[key] = "incomplete"
     end
     labeled
+  end
+
+  def sort_jobs(job)
+    if @labeled[job] == "inprogress"
+      ## raise circular_dependency_error
+    elsif @labeled[job] == "incomplete"
+      @labeled[job] = "inprogress"
+      build_list(job)
+    end
+  end
+
+  def build_list(job)
+    unless @parsed_jobs[job]&.empty?
+      sort_jobs(parsed_jobs[job])
+    end
+    @labeled[job] = "complete"
+    @sorted_jobs << job
   end
 end
