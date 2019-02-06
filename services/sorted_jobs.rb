@@ -8,6 +8,7 @@ class SortedJobs
   end
   
   def call
-    jobs = JobsOrg.new(unsorted_jobs)
+    jobs = JobsSorter.new(unsorted_jobs)
+    jobs.sort
   end
 end
