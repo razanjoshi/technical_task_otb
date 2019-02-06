@@ -6,6 +6,14 @@ class JobsSorter
 
   attr_reader :sorted_jobs
 
+  def self_dependency_error
+    raise 'Jobs can not depend on themselves.'
+  end
+
+  def circular_dependency_error
+    raise 'Jobs can not have circular dependencies'
+  end
+
   def initialize(unstructured_jobs)
     @parsed_jobs = job_parser(unstructured_jobs)
     @labeled = label_jobs
@@ -18,7 +26,8 @@ class JobsSorter
     s_jobs.each do |s|
       key, value = s.split(" => ")
       if key === value
-        ## raise self_dependency_error if key == value
+        # The key and value can not be same as same job can't depend on themselves.
+        raise self_dependency_error if key == value
       else
         jobs_hash[key] = value
       end
@@ -27,9 +36,9 @@ class JobsSorter
   end
 
   def sort
-    while @labeled.values.include?("incomplete")
+    while @labeled.values.include?('incomplete')
       @labeled.each_pair do |job, status|
-        sort_jobs(job) if status == "incomplete"
+        sort_jobs(job) if status == 'incomplete'
       end
     end
     @sorted_jobs
@@ -40,16 +49,16 @@ class JobsSorter
   def label_jobs
     labeled = {}
     @parsed_jobs.each do |key, value|
-      labeled[key] = "incomplete"
+      labeled[key] = 'incomplete'
     end
     labeled
   end
 
   def sort_jobs(job)
-    if @labeled[job] == "inprogress"
-      ## raise circular_dependency_error
-    elsif @labeled[job] == "incomplete"
-      @labeled[job] = "inprogress"
+    if @labeled[job] == 'inprogress'
+      raise circular_dependency_error
+    elsif @labeled[job] == 'incomplete'
+      @labeled[job] = 'inprogress'
       build_list(job)
     end
   end
@@ -58,7 +67,7 @@ class JobsSorter
     unless @parsed_jobs[job]&.empty?
       sort_jobs(parsed_jobs[job])
     end
-    @labeled[job] = "complete"
+    @labeled[job] = 'complete'
     @sorted_jobs << job
   end
 end
