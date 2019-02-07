@@ -1,25 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a technical task performed for a Ruby on Rails Developer Job Interview.
 
 Things you may want to cover:
 
-* Ruby version
+* Clone the repo by 
+`git clone git@github.com:razanjoshi/technical_task_otb.git`
 
-* System dependencies
+* Get to the working directory
+ `cd technical_task_otb`
 
-* Configuration
+* In the terminal, type `irb` and Enter
+`require './services/sorted_jobs.rb'`
+`require './jobs_sorter.rb'`
 
-* Database creation
+* Running the main class
+`SortedJobs.new("a => , b => , c => ").call`
 
-* Database initialization
+* Outupt
+`["a", "b", "c"]`
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-"# technical_task_otb" 
+* How to run the test suite: Exit the irb and type
+`rspec sorted_jobs_spec.rb`
+`rspec jobs_sorter_spec.rb`
