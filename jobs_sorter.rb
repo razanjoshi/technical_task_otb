@@ -22,14 +22,16 @@ class JobsSorter
 
   def job_parser(unstructured_jobs)
     jobs_hash = {}
-    s_jobs = unstructured_jobs.split(", ")
-    s_jobs.each do |s|
-      key, value = s.split(" => ")
-      if key === value
-        # The key and value can not be same as same job can't depend on themselves.
-        raise self_dependency_error if key == value
-      else
-        jobs_hash[key] = value
+    s_jobs = unstructured_jobs&.split(", ")
+    if s_jobs
+      s_jobs.each do |s|
+        key, value = s.split(" => ")
+        if key === value
+          # The key and value can not be same as same job can't depend on themselves.
+          raise self_dependency_error if key == value
+        else
+          jobs_hash[key] = value
+        end
       end
     end
     jobs_hash
@@ -65,7 +67,7 @@ class JobsSorter
 
   def build_list(job)
     unless @parsed_jobs[job]&.empty?
-      sort_jobs(parsed_jobs[job])
+      sort_jobs(@parsed_jobs[job])
     end
     @labeled[job] = 'complete'
     @sorted_jobs << job
