@@ -2,7 +2,6 @@
 
 # A Ruby Class to sort jobs according to their dependencies
 class JobsSorter
-
   attr_reader :sorted_jobs
 
   class SelfDependencyError < StandardError
@@ -56,9 +55,9 @@ class JobsSorter
   end
 
   def sort_jobs(job)
-    if @labeled[job] == 'inprogress'
+    if @labeled[job]&.include? 'inprogress'
       raise CircularReferenceError, CircularReferenceError::MESSAGE
-    elsif @labeled[job] == 'incomplete'
+    elsif @labeled[job]&.include? 'incomplete'
       @labeled[job] = 'inprogress'
       build_list(job)
     end
