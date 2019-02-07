@@ -2,8 +2,6 @@
 
 This is a technical task performed for a Ruby on Rails Developer Job Interview.
 
-Link to the commits: [https://github.com/razanjoshi/technical_task_otb/pull/1](https://github.com/razanjoshi/technical_task_otb/pull/1)
-
 Things you may want to cover:
 
 * Clone the repo by 
