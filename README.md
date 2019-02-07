@@ -23,3 +23,8 @@ Things you may want to cover:
 * How to run the test suite: Exit the irb and type
 `rspec sorted_jobs_spec.rb`
 `rspec jobs_sorter_spec.rb`
+
+* 
+![capture](https://user-images.githubusercontent.com/4223130/52384646-4c880180-2a76-11e9-93e4-e3ebd3d4bfbf.JPG)
+
+*![specs](https://user-images.githubusercontent.com/4223130/52384770-c02a0e80-2a76-11e9-91bc-d703b09ae2bf.JPG)
