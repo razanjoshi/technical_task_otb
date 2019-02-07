@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rspec'
-require 'pry'
 require './jobs_sorter'
 
 describe JobsSorter do
@@ -56,7 +55,7 @@ describe JobsSorter do
       let(:unsorted_jobs) { 'a => , b => , c => c' }
 
       it 'returns sorted job list with the one given job' do
-        expect{ subject }.to raise_error(RuntimeError, "Jobs can not depend on themselves.")
+        expect{ subject }.to raise_error(JobsSorter::SelfDependencyError, "Jobs can not depend on themselves.")
       end
     end
 
@@ -64,7 +63,7 @@ describe JobsSorter do
       let(:unsorted_jobs) { 'a => , b => c, c => f, d => a, e => , f => b' }
 
       it 'returns sorted job list with the one given job' do
-        expect{ subject }.to raise_error(RuntimeError, "Jobs can not have circular dependencies")
+        expect{ subject }.to raise_error(JobsSorter::CircularReferenceError, "Jobs can not have circular dependencies")
       end
     end
   end

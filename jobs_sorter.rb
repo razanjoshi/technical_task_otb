@@ -2,16 +2,15 @@
 
 # A Ruby Class to sort jobs according to their dependencies
 class JobsSorter
-  require 'pry'
 
   attr_reader :sorted_jobs
 
-  def self_dependency_error
-    raise 'Jobs can not depend on themselves.'
+  class SelfDependencyError < StandardError
+    MESSAGE = 'Jobs can not depend on themselves.'
   end
 
-  def circular_dependency_error
-    raise 'Jobs can not have circular dependencies'
+  class CircularReferenceError < StandardError
+    MESSAGE = 'Jobs can not have circular dependencies'
   end
 
   def initialize(unstructured_jobs)
@@ -28,7 +27,7 @@ class JobsSorter
         key, value = s.split(" => ")
         if key === value
           # The key and value can not be same as same job can't depend on themselves.
-          raise self_dependency_error if key == value
+          raise SelfDependencyError, SelfDependencyError::MESSAGE if key == value
         else
           jobs_hash[key] = value
         end
@@ -58,7 +57,7 @@ class JobsSorter
 
   def sort_jobs(job)
     if @labeled[job] == 'inprogress'
-      raise circular_dependency_error
+      raise CircularReferenceError, CircularReferenceError::MESSAGE
     elsif @labeled[job] == 'incomplete'
       @labeled[job] = 'inprogress'
       build_list(job)
@@ -70,6 +69,6 @@ class JobsSorter
       sort_jobs(@parsed_jobs[job])
     end
     @labeled[job] = 'complete'
-    @sorted_jobs << job
+    @sorted_jobs.push(job)
   end
 end
